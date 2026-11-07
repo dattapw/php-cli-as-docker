@@ -16,12 +16,6 @@ It behaves like a native install: your current directory is available inside the
 ```bash
 curl -fsSL https://raw.githubusercontent.com/dattapw/php-cli-as-docker/main/install.sh | sh
 ```
- 
-If you'd rather read it first:
- 
-```bash
-curl -fsSLO https://raw.githubusercontent.com/dattapw/php-cli-as-docker/main/install.sh
-sh install.sh
 ```
 
 The installer:
@@ -51,9 +45,8 @@ Run `php -m` to see what is loaded.
 
 ## Limitations
  
-- **Only the current directory (and below) is visible** to PHP. Scripts or files elsewhere need an extra mount via `PHP_DOCKER_ARGS`.
+- **Only the current directory (and below) is visible** to PHP.
 - **`--network host` is Linux-only** and gives the container your host network. Remove it from the script if you want isolation, and add `-p` mappings yourself.
-- **The image is built locally.** The base tag is rebuilt upstream weekly with security patches; run `PHP_DOCKER_REBUILD=1 php -v` now and then to pick them up.
 - Commands that must run as root or install system packages aren't supported by this wrapper.
 
 

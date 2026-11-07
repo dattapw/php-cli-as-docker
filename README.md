@@ -27,6 +27,36 @@ Open a new terminal (or `source` the rc file it prints) and run `php -v`.
 The first run builds the local image, which takes a minute or two. After that, startup is instant.
 
 
+## Usage
+ 
+Use `php` and `composer` as you normally would:
+ 
+```bash
+php script.php
+php -r 'echo PHP_VERSION, PHP_EOL;'
+php -S 127.0.0.1:8000          # dev server, reachable from your browser
+```
+ 
+### Configuration
+ 
+Configure the wrapper with environment variables:
+ 
+| Variable | Default | Description |
+|---|---|---|
+| `PHP_DOCKER_VERSION` | `8.5` | PHP version to use. Each version gets its own image (`local/php-cli:<version>`). |
+| `PHP_DOCKER_REBUILD` | unset | Set to any value to rebuild the image, pulling the latest base image. |
+| `PHP_DOCKER_ARGS` | unset | Extra arguments passed to `docker run`. |
+ 
+```bash
+PHP_DOCKER_VERSION=8.4 php -v                       # use PHP 8.4
+PHP_DOCKER_REBUILD=1 php -v                         # refresh the image
+PHP_DOCKER_ARGS="-v /data:/data" php /data/job.php  # mount extra paths
+PHP_DOCKER_ARGS="-e PHP_MEMORY_LIMIT=512M" php heavy.php
+```
+ 
+The base image can be tuned with any of its [environment variables](https://serversideup.net/open-source/docker-php/docs/reference/environment-variable-specification) (for example `PHP_MEMORY_LIMIT` or `PHP_DATE_TIMEZONE`) by passing them with `-e` through `PHP_DOCKER_ARGS`.
+
+
 ## Included extensions
 
 From the base image:

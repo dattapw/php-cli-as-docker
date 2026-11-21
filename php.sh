@@ -14,13 +14,13 @@ build_image() {
   FROM serversideup/php:${PHP_VERSION}-cli
   ENV PATH="\${PATH}:/composer/vendor/bin"
   USER root
-  # RUN install-php-extensions ${EXTENSIONS}
-  # RUN docker-php-serversideup-set-id www-data $USER_ID:$GROUP_ID && \
-  #  docker-php-serversideup-set-file-permissions --owner $USER_ID:$GROUP_ID  \
-  #  && chown -R $USER_ID:$GROUP_ID /composer
+  RUN install-php-extensions ${EXTENSIONS}
+  RUN docker-php-serversideup-set-id www-data $USER_ID:$GROUP_ID && \
+   docker-php-serversideup-set-file-permissions --owner $USER_ID:$GROUP_ID  \
+   && chown -R $USER_ID:$GROUP_ID /composer
   USER www-data
-  #RUN composer global require cpx/cpx && \
-  #  composer global update cpx/cpx
+  RUN composer global require cpx/cpx && \
+   composer global update cpx/cpx
 EOF
 }
 

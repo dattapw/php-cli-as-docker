@@ -47,12 +47,14 @@ fi
 chmod 755 "$TMP"
 mv -f "$TMP" "$BIN_DIR/php"
 
-# 3. Soft link it as composer (relative link, so the pair can be moved together)
+# 3. Soft link it as composer and cpx (relative link, so the pair can be moved together)
 ln -sfn php "$BIN_DIR/composer"
+ln -sfn php "$BIN_DIR/cpx"
 
 echo "Installed:"
 echo "  $BIN_DIR/php"
 echo "  $BIN_DIR/composer -> php"
+echo "  $BIN_DIR/cpx -> php"
 
 if ! command -v docker >/dev/null 2>&1; then
   echo "Warning: docker was not found. Install Docker before running php." >&2

@@ -5,14 +5,22 @@ set -euo pipefail
 PHP_VERSION="${PHP_DOCKER_VERSION:-8.5}"
 IMAGE="local/php-cli:${PHP_VERSION}"
 EXTENSIONS="bcmath calendar exif gd gettext gmp imagick intl ldap mysqli soap sockets xsl apcu igbinary msgpack"
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
 
-build_image() {
+build_image() {  
   echo "Building $IMAGE (one-time)..." >&2
   docker build --pull -t "$IMAGE" - >&2 <<EOF
-FROM serversideup/php:${PHP_VERSION}-cli
-USER root
-RUN install-php-extensions ${EXTENSIONS}
-USER www-data
+  FROM serversideup/php:${PHP_VERSION}-cli
+  ENV PATH="\${PATH}:/composer/vendor/bin"
+  USER root
+  # RUN install-php-extensions ${EXTENSIONS}
+  # RUN docker-php-serversideup-set-id www-data $USER_ID:$GROUP_ID && \
+  #  docker-php-serversideup-set-file-permissions --owner $USER_ID:$GROUP_ID  \
+  #  && chown -R $USER_ID:$GROUP_ID /composer
+  USER www-data
+  #RUN composer global require cpx/cpx && \
+  #  composer global update cpx/cpx
 EOF
 }
 

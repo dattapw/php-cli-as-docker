@@ -15,6 +15,14 @@ build_image() {
   ENV PATH="\${PATH}:/composer/vendor/bin"
   USER root
   RUN install-php-extensions ${EXTENSIONS}
+  
+  # --- Copy Node.js and npm selectively ---
+  COPY --from=node:22-bookworm-slim /usr/local/bin/node /usr/local/bin/node
+  COPY --from=node:22-bookworm-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+  RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+  # ----------------------------------------
+
   RUN docker-php-serversideup-set-id www-data $USER_ID:$GROUP_ID && \
    docker-php-serversideup-set-file-permissions --owner $USER_ID:$GROUP_ID  \
    && chown -R $USER_ID:$GROUP_ID /composer
